@@ -1,0 +1,37 @@
+import {chromium} from "playwright";
+import assert from "node:assert/strict";
+const browser=await chromium.launch({channel:"chrome",headless:true});
+const page=await browser.newPage({viewport:{width:1680,height:1050}});
+const errors=[];page.on("pageerror",e=>errors.push(e.message));
+try {
+ await page.goto("http://127.0.0.1:4817/app.html#workflows");
+ await page.getByRole("region",{name:"Visual workflow editor"}).waitFor();
+ const original=await page.evaluate(()=>JSON.parse(localStorage.getItem("linear-crm.v1")).workflows);
+ await page.getByLabel("Step name",{exact:true}).fill("Qualified lead?");
+ const body=page.getByRole("button",{name:"Select Qualified lead?",exact:true});
+ const before=await body.boundingBox();
+ await page.mouse.move(before.x+60,before.y+25);await page.mouse.down();await page.mouse.move(before.x+100,before.y+75,{steps:6});await page.mouse.up();
+ const after=await body.boundingBox();assert.ok(after.x>before.x+30);assert.ok(after.y>before.y+40);
+ await page.getByRole("button",{name:"Create task ACTION",exact:true}).click();
+ await page.getByLabel("Step name",{exact:true}).fill("Review prospect");
+ await page.getByRole("button",{name:"Connect from New lead",exact:true}).click();
+ await page.getByRole("button",{name:"Connect to Review prospect",exact:true}).click();
+ await page.getByRole("button",{name:"Save draft",exact:true}).click();
+ let saved=await page.evaluate(()=>JSON.parse(localStorage.getItem("linear-crm.v1")).visualWorkflow);
+ assert.equal(saved.nodes.length,6);assert.equal(saved.edges.length,5);
+ await page.reload();assert.equal(await page.locator(".canvas-node").count(),6);
+ await page.getByRole("button",{name:"Zoom out",exact:true}).click();
+ await page.getByRole("button",{name:"Zoom out",exact:true}).click();
+ await page.getByRole("button",{name:"Dark mode",exact:true}).click();
+ await page.screenshot({path:"screenshots/workflow-canvas.png",fullPage:true});
+ await page.getByRole("button",{name:"Select Review prospect",exact:true}).click();
+ await page.getByRole("button",{name:"Remove",exact:true}).click();
+ await page.getByRole("button",{name:"Confirm",exact:true}).click();
+ await page.getByRole("button",{name:"Save draft",exact:true}).click();
+ saved=await page.evaluate(()=>JSON.parse(localStorage.getItem("linear-crm.v1")).visualWorkflow);assert.equal(saved.nodes.length,5);assert.equal(saved.edges.length,4);
+ assert.deepEqual(await page.evaluate(()=>JSON.parse(localStorage.getItem("linear-crm.v1")).workflows),original);
+ await page.getByRole("tab",{name:"Local rules",exact:true}).click();await page.getByRole("button",{name:"New workflow",exact:true}).click();await page.locator(".workflow-form-card").waitFor();
+ await page.getByRole("tab",{name:"Visual editor",exact:true}).click();await page.setViewportSize({width:390,height:844});
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));assert.deepEqual(errors,[]);
+ console.log("Workflow canvas checks passed: drag, edit, add/connect/delete nodes, save/reload, rules isolation, mobile.");
+} finally {await browser.close();}

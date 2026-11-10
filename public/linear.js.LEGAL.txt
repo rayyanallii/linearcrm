@@ -1,0 +1,189 @@
+Bundled license information:
+
+react/cjs/react.production.js:
+  /**
+   * @license React
+   * react.production.js
+   *
+   * Copyright (c) Meta Platforms, Inc. and affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+
+react-dom/cjs/react-dom.production.js:
+  /**
+   * @license React
+   * react-dom.production.js
+   *
+   * Copyright (c) Meta Platforms, Inc. and affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+
+react/cjs/react-jsx-runtime.production.js:
+  /**
+   * @license React
+   * react-jsx-runtime.production.js
+   *
+   * Copyright (c) Meta Platforms, Inc. and affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+
+scheduler/cjs/scheduler.production.js:
+  /**
+   * @license React
+   * scheduler.production.js
+   *
+   * Copyright (c) Meta Platforms, Inc. and affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+
+react-dom/cjs/react-dom-client.production.js:
+  /**
+   * @license React
+   * react-dom-client.production.js
+   *
+   * Copyright (c) Meta Platforms, Inc. and affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+
+use-sync-external-store/cjs/use-sync-external-store-shim.production.js:
+  /**
+   * @license React
+   * use-sync-external-store-shim.production.js
+   *
+   * Copyright (c) Meta Platforms, Inc. and affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+
+use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.production.js:
+  /**
+   * @license React
+   * use-sync-external-store-shim/with-selector.production.js
+   *
+   * Copyright (c) Meta Platforms, Inc. and affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+
+react-is/cjs/react-is.production.min.js:
+  /** @license React v16.13.1
+   * react-is.production.min.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+
+papaparse/papaparse.min.js:
+  /* @license
+  Papa Parse
+  v5.5.3
+  https://github.com/mholt/PapaParse
+  License: MIT
+  */
+
+@tabler/icons-react/dist/esm/defaultAttributes.mjs:
+@tabler/icons-react/dist/esm/createReactComponent.mjs:
+@tabler/icons-react/dist/esm/icons/IconActivity.mjs:
+@tabler/icons-react/dist/esm/icons/IconAdjustmentsHorizontal.mjs:
+@tabler/icons-react/dist/esm/icons/IconAdjustments.mjs:
+@tabler/icons-react/dist/esm/icons/IconAlertTriangle.mjs:
+@tabler/icons-react/dist/esm/icons/IconAlignLeft.mjs:
+@tabler/icons-react/dist/esm/icons/IconArrowDown.mjs:
+@tabler/icons-react/dist/esm/icons/IconArrowLeft.mjs:
+@tabler/icons-react/dist/esm/icons/IconArrowRight.mjs:
+@tabler/icons-react/dist/esm/icons/IconArrowUpRight.mjs:
+@tabler/icons-react/dist/esm/icons/IconArrowUp.mjs:
+@tabler/icons-react/dist/esm/icons/IconAt.mjs:
+@tabler/icons-react/dist/esm/icons/IconAutomation.mjs:
+@tabler/icons-react/dist/esm/icons/IconBolt.mjs:
+@tabler/icons-react/dist/esm/icons/IconBookmark.mjs:
+@tabler/icons-react/dist/esm/icons/IconBox.mjs:
+@tabler/icons-react/dist/esm/icons/IconBriefcase.mjs:
+@tabler/icons-react/dist/esm/icons/IconBuildingSkyscraper.mjs:
+@tabler/icons-react/dist/esm/icons/IconBuilding.mjs:
+@tabler/icons-react/dist/esm/icons/IconCalendar.mjs:
+@tabler/icons-react/dist/esm/icons/IconChartBar.mjs:
+@tabler/icons-react/dist/esm/icons/IconCheck.mjs:
+@tabler/icons-react/dist/esm/icons/IconCheckbox.mjs:
+@tabler/icons-react/dist/esm/icons/IconChevronDown.mjs:
+@tabler/icons-react/dist/esm/icons/IconChevronRight.mjs:
+@tabler/icons-react/dist/esm/icons/IconChevronUp.mjs:
+@tabler/icons-react/dist/esm/icons/IconCircleCheck.mjs:
+@tabler/icons-react/dist/esm/icons/IconCircleDot.mjs:
+@tabler/icons-react/dist/esm/icons/IconClock.mjs:
+@tabler/icons-react/dist/esm/icons/IconCloud.mjs:
+@tabler/icons-react/dist/esm/icons/IconCopy.mjs:
+@tabler/icons-react/dist/esm/icons/IconCurrencyDollar.mjs:
+@tabler/icons-react/dist/esm/icons/IconDatabase.mjs:
+@tabler/icons-react/dist/esm/icons/IconDeviceFloppy.mjs:
+@tabler/icons-react/dist/esm/icons/IconDownload.mjs:
+@tabler/icons-react/dist/esm/icons/IconFolder.mjs:
+@tabler/icons-react/dist/esm/icons/IconGitBranch.mjs:
+@tabler/icons-react/dist/esm/icons/IconHash.mjs:
+@tabler/icons-react/dist/esm/icons/IconHistory.mjs:
+@tabler/icons-react/dist/esm/icons/IconHome.mjs:
+@tabler/icons-react/dist/esm/icons/IconLayoutDashboard.mjs:
+@tabler/icons-react/dist/esm/icons/IconLayoutKanban.mjs:
+@tabler/icons-react/dist/esm/icons/IconLayoutSidebar.mjs:
+@tabler/icons-react/dist/esm/icons/IconLifebuoy.mjs:
+@tabler/icons-react/dist/esm/icons/IconLink.mjs:
+@tabler/icons-react/dist/esm/icons/IconMail.mjs:
+@tabler/icons-react/dist/esm/icons/IconMapPin.mjs:
+@tabler/icons-react/dist/esm/icons/IconMinus.mjs:
+@tabler/icons-react/dist/esm/icons/IconMoon.mjs:
+@tabler/icons-react/dist/esm/icons/IconNote.mjs:
+@tabler/icons-react/dist/esm/icons/IconNotes.mjs:
+@tabler/icons-react/dist/esm/icons/IconPackage.mjs:
+@tabler/icons-react/dist/esm/icons/IconPaperclip.mjs:
+@tabler/icons-react/dist/esm/icons/IconPencil.mjs:
+@tabler/icons-react/dist/esm/icons/IconPhone.mjs:
+@tabler/icons-react/dist/esm/icons/IconPin.mjs:
+@tabler/icons-react/dist/esm/icons/IconPinnedOff.mjs:
+@tabler/icons-react/dist/esm/icons/IconPlayerPlay.mjs:
+@tabler/icons-react/dist/esm/icons/IconPlayerStop.mjs:
+@tabler/icons-react/dist/esm/icons/IconPlus.mjs:
+@tabler/icons-react/dist/esm/icons/IconReceipt.mjs:
+@tabler/icons-react/dist/esm/icons/IconRefresh.mjs:
+@tabler/icons-react/dist/esm/icons/IconSearch.mjs:
+@tabler/icons-react/dist/esm/icons/IconSend.mjs:
+@tabler/icons-react/dist/esm/icons/IconSettings.mjs:
+@tabler/icons-react/dist/esm/icons/IconSparkles.mjs:
+@tabler/icons-react/dist/esm/icons/IconSpeakerphone.mjs:
+@tabler/icons-react/dist/esm/icons/IconStar.mjs:
+@tabler/icons-react/dist/esm/icons/IconSun.mjs:
+@tabler/icons-react/dist/esm/icons/IconTableOptions.mjs:
+@tabler/icons-react/dist/esm/icons/IconTable.mjs:
+@tabler/icons-react/dist/esm/icons/IconTag.mjs:
+@tabler/icons-react/dist/esm/icons/IconTargetArrow.mjs:
+@tabler/icons-react/dist/esm/icons/IconTemplate.mjs:
+@tabler/icons-react/dist/esm/icons/IconTextSize.mjs:
+@tabler/icons-react/dist/esm/icons/IconToggleRight.mjs:
+@tabler/icons-react/dist/esm/icons/IconTrash.mjs:
+@tabler/icons-react/dist/esm/icons/IconTrendingUp.mjs:
+@tabler/icons-react/dist/esm/icons/IconUpload.mjs:
+@tabler/icons-react/dist/esm/icons/IconUserCircle.mjs:
+@tabler/icons-react/dist/esm/icons/IconUserSearch.mjs:
+@tabler/icons-react/dist/esm/icons/IconUser.mjs:
+@tabler/icons-react/dist/esm/icons/IconUsers.mjs:
+@tabler/icons-react/dist/esm/icons/IconX.mjs:
+@tabler/icons-react/dist/esm/tabler-icons-react.mjs:
+  /**
+   * @license @tabler/icons-react v3.50.0 - MIT
+   *
+   * This source code is licensed under the MIT license.
+   * See the LICENSE file in the root directory of this source tree.
+   */

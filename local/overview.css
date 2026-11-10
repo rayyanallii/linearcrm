@@ -1,0 +1,213 @@
+.overview {
+  padding: clamp(16px, 3vw, 40px);
+  overflow: auto;
+}
+.report-heading,
+.report-panel h2,
+.summary-metrics span,
+.agenda-row,
+.stage-summary > span:first-child,
+.history > div,
+.view-line,
+.filter-options {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.report-heading {
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.report-heading h1 {
+  font-size: 26px;
+  letter-spacing: -1px;
+  margin: 5px 0 0;
+  font-weight: 600;
+}
+.summary-metrics,
+.report-grid {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+.summary-metrics {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.summary-metrics section,
+.report-panel {
+  border: 1px solid var(--t-border-color-light, #e7e7e7);
+  border-radius: 8px;
+  padding: 16px;
+}
+.summary-metrics span,
+.report-panel h2 svg {
+  color: var(--t-font-color-secondary, #666);
+}
+.summary-metrics strong {
+  display: block;
+  letter-spacing: -1px;
+  font-weight: 600;
+  font-size: 26px;
+  margin: 10px 0 4px;
+}
+.report-grid {
+  grid-template-columns: 1fr 1fr;
+}
+.report-panel {
+  min-width: 0;
+}
+.report-panel h2 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 14px;
+}
+.report-panel h2 svg {
+  width: 17px;
+  height: 17px;
+}
+.stage-summary {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 9px 0;
+  color: inherit;
+}
+.stage-summary b {
+  margin-left: auto;
+  font-weight: 500;
+}
+.track {
+  display: block;
+  height: 5px;
+  background: #f3f3f3;
+  border-radius: 4px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+.track i {
+  height: 100%;
+  display: block;
+}
+.agenda {
+  max-height: 285px;
+  overflow: auto;
+}
+.agenda-row {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+}
+.agenda-row:last-child {
+  border: 0;
+}
+.agenda-row button {
+  background: transparent;
+  border: 0;
+  text-align: left;
+  color: inherit;
+  min-width: 0;
+  flex: 1;
+}
+.agenda-row b,
+.agenda-row small {
+  display: block;
+  overflow-wrap: anywhere;
+}
+.agenda-row b {
+  font-weight: 500;
+}
+.agenda-row small {
+  margin-top: 3px;
+}
+.history > div {
+  justify-content: space-between;
+  border-top: 1px solid #eee;
+  padding: 9px 0;
+}
+.history small {
+  flex: none;
+}
+.record-views {
+  border-bottom: 1px solid #eee;
+  padding: 4px 10px;
+}
+.view-line,
+.filter-options {
+  flex-wrap: wrap;
+}
+.view-line select,
+.filter-options select,
+.filter-options input {
+  font: inherit;
+  font-size: 12px;
+  color: inherit;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 4px;
+  padding: 4px 7px;
+  max-width: 100%;
+}
+.view-line select {
+  border-color: transparent;
+}
+.filter-options {
+  padding: 6px 0;
+}
+.follow-up-actions {
+  border-top: 1px solid #eee;
+  margin-top: 12px;
+}
+.follow-up-actions button {
+  margin-right: 6px;
+}
+.overview p {
+  color: #777;
+}
+.tools strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.report-panel .stage-summary:hover,
+.agenda-row button:hover,
+.related-link:hover {
+  background: #f8f8f8;
+}
+@media (max-width: 900px) {
+  .report-grid {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 560px) {
+  .summary-metrics {
+    gap: 6px;
+  }
+  .summary-metrics section {
+    padding: 8px;
+  }
+  .summary-metrics span {
+    font-size: 11px;
+  }
+  .summary-metrics span svg {
+    display: none;
+  }
+  .summary-metrics strong {
+    font-size: 17px;
+  }
+  .overview {
+    padding: 12px;
+  }
+  .report-heading h1 {
+    font-size: 22px;
+  }
+  .history > div {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .report-panel {
+    padding: 12px;
+  }
+  .report-heading {
+    gap: 5px;
+  }
+}

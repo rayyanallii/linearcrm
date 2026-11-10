@@ -1,0 +1,77 @@
+import { chromium } from "playwright";
+import assert from "node:assert/strict";
+const browser = await chromium.launch({ channel: "chrome", headless: true });
+const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+const errors = [], dialogs = [];
+page.on("pageerror", error => errors.push(error.message));
+page.on("dialog", async dialog => { dialogs.push(dialog.message()); await dialog.accept(); });
+const nav = name => page.getByRole("button", { name, exact: true }).click();
+async function confirmStyled() {
+  const dialog = page.locator("dialog.app-dialog");
+  await dialog.waitFor({ state: "visible" });
+  await dialog.getByRole("button", { name: "Confirm" }).click();
+}
+async function dismissNotice() {
+  const dialog = page.locator("dialog.app-dialog");
+  await dialog.waitFor({ state: "visible" });
+  dialogs.push(await dialog.innerText());
+  await dialog.getByRole("button", { name: "Close" }).click();
+}
+const state = () => page.evaluate(() => JSON.parse(localStorage.getItem("linear-crm.v1")));
+try {
+  await page.goto(process.env.BASE_URL || "http://127.0.0.1:4817/app.html");
+  await nav("Settings");
+  await page.getByLabel("Workspace name").fill("Studio CRM");
+  await page.getByLabel("Row density").click();
+  await page.getByRole("option", { name: "Compact", exact: true }).click();
+  await nav("Save workspace");
+  assert.equal(await page.locator(".sidebar-account-copy small").innerText(), "Studio CRM");
+  assert.match(await page.locator(".app-shell").getAttribute("class"), /density-compact/);
+  await nav("Dark");
+  await page.reload();
+  assert.equal((await state()).workspace, "Studio CRM");
+  assert.equal((await state()).ui.density, "compact");
+  assert.match(await page.locator("html").getAttribute("class"), /dark/);
+  await page.screenshot({ path: "screenshots/settings-refined-dark.png" });
+  await nav("Data");
+  const previous = await state();
+  const backup = structuredClone(previous);
+  backup.workspace = "Restored studio";
+  await page.evaluate(() => { window.originalSet = Storage.prototype.setItem; Storage.prototype.setItem = function() { throw new DOMException("Full", "QuotaExceededError"); }; });
+  await page.locator('.settings-panels input[type="file"]').setInputFiles({ name: "backup.json", mimeType: "application/json", buffer: Buffer.from(JSON.stringify(backup)) });
+  await confirmStyled();
+  await dismissNotice();
+  await page.waitForFunction(() => document.querySelector(".sidebar-account-copy small").textContent === "Studio CRM");
+  assert.deepEqual(await state(), previous);
+  await page.evaluate(() => { Storage.prototype.setItem = window.originalSet; });
+  await page.locator('.settings-panels input[type="file"]').setInputFiles({ name: "backup.json", mimeType: "application/json", buffer: Buffer.from(JSON.stringify(backup)) });
+  await confirmStyled();
+  await page.getByRole("heading", { name: "Workspace overview" }).waitFor();
+  assert.equal(await page.locator(".sidebar-account-copy small").innerText(), "Restored studio");
+  assert.equal(await page.locator(".lead-overview-strip").count(), 0);
+  await nav("Settings"); await nav("Pipelines");
+  await page.getByLabel("New pipeline name").fill("Empty forecast"); await nav("Add pipeline");
+  await nav("Overview");
+  await page.getByLabel("Forecast pipeline").click();
+  await page.getByRole("option", { name: "Sales", exact: true }).click();
+  const sales = (await state()).deals.filter(deal => deal.pipeline === "sales" && !["Won", "Lost"].includes(deal.stage));
+  const money = value => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", notation: "compact", maximumFractionDigits: 1 }).format(value);
+  assert.equal(await page.locator(".kpi-card").nth(0).locator("strong").innerText(), money(sales.reduce((sum, row) => sum + Number(row.amount || 0), 0)));
+  assert.equal(await page.locator(".kpi-card").nth(1).locator("strong").innerText(), money(sales.reduce((sum, row) => sum + Number(row.amount || 0) * Number(row.probability || 0) / 100, 0)));
+  await page.getByLabel("Forecast pipeline").click();
+  await page.getByRole("option", { name: "Empty forecast", exact: true }).click();
+  assert.equal(await page.locator(".kpi-card").first().locator("strong").innerText(), "$0");
+  assert.match(await page.locator(".pipeline-foot").innerText(), /\$0/);
+  await page.getByRole("button", { name: "Open pipeline", exact: true }).click();
+  assert.equal(await page.locator(".record-row").count(), 0);
+  await nav("Overview");
+  await page.screenshot({ path: "screenshots/overview-without-outreach.png" });
+  await nav("Settings");
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.waitForFunction(() => document.querySelector(".app-sidebar").getBoundingClientRect().right <= 0);
+  await page.screenshot({ path: "screenshots/settings-refined-mobile.png" });
+  assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+  assert.ok(dialogs.some(message => message.includes("storage is full")));
+  assert.deepEqual(errors, []);
+  console.log("Settings and forecasts passed: workspace/density/theme save, refresh, restore rollback and success, pipeline filtering/drilldown, mobile layout.");
+} finally { await browser.close(); }

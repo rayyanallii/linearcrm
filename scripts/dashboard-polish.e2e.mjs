@@ -1,0 +1,33 @@
+import {chromium} from "playwright";
+import assert from "node:assert/strict";
+const browser=await chromium.launch({channel:"chrome",headless:true});
+const page=await browser.newPage({viewport:{width:1440,height:1100}});
+const errors=[];page.on("pageerror",e=>errors.push(e.message));
+try{
+ await page.goto("http://127.0.0.1:4817/app.html#dashboards");
+ const records=await page.evaluate(()=>JSON.stringify(JSON.parse(localStorage.getItem("linear-crm.v1")).deals));
+ await page.getByText("Demo preview · sample opportunities",{exact:true}).waitFor();
+ assert.equal(await page.locator(".dashboard-page select").count(),0);
+ await page.getByRole("button",{name:"Performance pipeline",exact:true}).click();
+ await page.getByRole("option",{name:"Enterprise",exact:true}).click();
+ assert.equal(await page.getByRole("button",{name:"Performance pipeline",exact:true}).innerText(),"Enterprise");
+ await page.getByRole("button",{name:"Performance owner",exact:true}).click();
+ await page.keyboard.press("Escape");
+ await page.getByRole("button",{name:"Reset filters",exact:true}).click();
+ await page.getByRole("button",{name:"Dark mode",exact:true}).click();
+ await page.screenshot({path:"screenshots/dashboard-polished.png",fullPage:true});
+ await page.getByRole("button",{name:"Use my data",exact:true}).click();
+ await page.getByText("Your workspace · live records",{exact:true}).waitFor();
+ assert.equal(await page.evaluate(()=>JSON.stringify(JSON.parse(localStorage.getItem("linear-crm.v1")).deals)),records);
+ await page.getByRole("tab",{name:"Custom widgets",exact:true}).click();
+ await page.getByRole("button",{name:"Add widget",exact:true}).first().click();
+ assert.equal(await page.locator(".dashboard-page select").count(),0);
+ await page.locator('input[name="title"]').fill("QA widget");
+ await page.locator(".widget-form").getByRole("button",{name:"Add widget",exact:true}).click();
+ await page.getByRole("heading",{name:"QA widget",exact:true}).waitFor();
+ await page.getByRole("tab",{name:"Sales performance",exact:true}).click();
+ await page.setViewportSize({width:390,height:844});
+ assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ assert.deepEqual(errors,[]);
+ console.log("Dashboard checks passed: styled selects, demo isolation, tabs, widget creation, mobile width.");
+}finally{await browser.close();}

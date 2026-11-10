@@ -1,0 +1,46 @@
+{
+  "name": "linear-crm",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "node build.mjs",
+    "test:e2e": "node scripts/e2e.mjs",
+    "test:workflows": "node local/workflow-rules.mjs",
+    "test:commerce": "node --test scripts/commerce.test.mjs",
+    "test:campaigns": "node --test scripts/campaigns.test.mjs",
+    "test:leads": "node --test scripts/lead-conversion.test.mjs && node scripts/leads.e2e.mjs",
+    "test:pipelines": "node --test scripts/pipelines.test.mjs && node scripts/search-pipelines.e2e.mjs",
+    "test:outreach": "node scripts/outreach.e2e.mjs",
+    "test:settings": "node scripts/settings-forecast.e2e.mjs",
+    "test:liner": "node --test scripts/liner.test.mjs && node scripts/liner.e2e.mjs",
+    "test:navigation": "node scripts/navigation-chat.e2e.mjs",
+    "test:duplicates": "node --test scripts/duplicates.test.mjs && node scripts/duplicates.e2e.mjs",
+    "test:moves": "node --test scripts/move-records.test.mjs && node scripts/move-records.e2e.mjs",
+    "test:activity": "node --test scripts/activity.test.mjs && node scripts/activity.e2e.mjs",
+    "serve": "python -m http.server 4817 --bind 127.0.0.1",
+    "test:performance": "node --test scripts/performance.test.mjs && node scripts/performance.e2e.mjs",
+    "test:landing": "node scripts/landing.e2e.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@fontsource/inter": "^5.3.0",
+    "@tabler/icons-react": "^3.50.0",
+    "animejs": "^4.5.0",
+    "framer-motion": "^14.10.1",
+    "gsap": "^3.15.1",
+    "papaparse": "^5.5.3",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "twenty-ui": "^2.54.3"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "playwright": "^1.52.0"
+  },
+  "private": true
+}
