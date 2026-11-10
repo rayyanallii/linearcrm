@@ -11,17 +11,6 @@ react/cjs/react.production.js:
    * LICENSE file in the root directory of this source tree.
    */
 
-react/cjs/react-jsx-runtime.production.js:
-  /**
-   * @license React
-   * react-jsx-runtime.production.js
-   *
-   * Copyright (c) Meta Platforms, Inc. and affiliates.
-   *
-   * This source code is licensed under the MIT license found in the
-   * LICENSE file in the root directory of this source tree.
-   */
-
 scheduler/cjs/scheduler.production.js:
   /**
    * @license React
@@ -55,16 +44,27 @@ react-dom/cjs/react-dom-client.production.js:
    * LICENSE file in the root directory of this source tree.
    */
 
+react/cjs/react-jsx-runtime.production.js:
+  /**
+   * @license React
+   * react-jsx-runtime.production.js
+   *
+   * Copyright (c) Meta Platforms, Inc. and affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */
+
 @tabler/icons-react/dist/esm/defaultAttributes.mjs:
 @tabler/icons-react/dist/esm/createReactComponent.mjs:
 @tabler/icons-react/dist/esm/icons/IconAdjustmentsHorizontal.mjs:
 @tabler/icons-react/dist/esm/icons/IconAlertTriangle.mjs:
-@tabler/icons-react/dist/esm/icons/IconArrowLeft.mjs:
 @tabler/icons-react/dist/esm/icons/IconArrowRight.mjs:
 @tabler/icons-react/dist/esm/icons/IconArrowUpRight.mjs:
 @tabler/icons-react/dist/esm/icons/IconBolt.mjs:
 @tabler/icons-react/dist/esm/icons/IconBriefcase.mjs:
 @tabler/icons-react/dist/esm/icons/IconBuildingSkyscraper.mjs:
+@tabler/icons-react/dist/esm/icons/IconCalendar.mjs:
 @tabler/icons-react/dist/esm/icons/IconCheck.mjs:
 @tabler/icons-react/dist/esm/icons/IconCheckbox.mjs:
 @tabler/icons-react/dist/esm/icons/IconChevronDown.mjs:
@@ -73,8 +73,12 @@ react-dom/cjs/react-dom-client.production.js:
 @tabler/icons-react/dist/esm/icons/IconClock.mjs:
 @tabler/icons-react/dist/esm/icons/IconDatabase.mjs:
 @tabler/icons-react/dist/esm/icons/IconDots.mjs:
+@tabler/icons-react/dist/esm/icons/IconDownload.mjs:
+@tabler/icons-react/dist/esm/icons/IconFile.mjs:
 @tabler/icons-react/dist/esm/icons/IconFilter.mjs:
 @tabler/icons-react/dist/esm/icons/IconLayoutDashboard.mjs:
+@tabler/icons-react/dist/esm/icons/IconLayoutKanban.mjs:
+@tabler/icons-react/dist/esm/icons/IconLayoutSidebar.mjs:
 @tabler/icons-react/dist/esm/icons/IconLock.mjs:
 @tabler/icons-react/dist/esm/icons/IconMail.mjs:
 @tabler/icons-react/dist/esm/icons/IconMenu2.mjs:
@@ -85,8 +89,10 @@ react-dom/cjs/react-dom-client.production.js:
 @tabler/icons-react/dist/esm/icons/IconRefresh.mjs:
 @tabler/icons-react/dist/esm/icons/IconSearch.mjs:
 @tabler/icons-react/dist/esm/icons/IconSparkles.mjs:
+@tabler/icons-react/dist/esm/icons/IconTable.mjs:
 @tabler/icons-react/dist/esm/icons/IconTargetArrow.mjs:
 @tabler/icons-react/dist/esm/icons/IconTrendingUp.mjs:
+@tabler/icons-react/dist/esm/icons/IconUpload.mjs:
 @tabler/icons-react/dist/esm/icons/IconUserSearch.mjs:
 @tabler/icons-react/dist/esm/icons/IconUsers.mjs:
 @tabler/icons-react/dist/esm/icons/IconX.mjs:
@@ -96,130 +102,4 @@ react-dom/cjs/react-dom-client.production.js:
    *
    * This source code is licensed under the MIT license.
    * See the LICENSE file in the root directory of this source tree.
-   */
-
-gsap/gsap-core.js:
-  /*!
-   * GSAP 3.15.1
-   * https://gsap.com
-   *
-   * @license Copyright 2008-2026, GreenSock. All rights reserved.
-   * Subject to the terms at https://gsap.com/standard-license
-   * @author: Jack Doyle, jack@greensock.com
-  */
-
-gsap/CSSPlugin.js:
-  /*!
-   * CSSPlugin 3.15.1
-   * https://gsap.com
-   *
-   * Copyright 2008-2026, GreenSock. All rights reserved.
-   * Subject to the terms at https://gsap.com/standard-license
-   * @author: Jack Doyle, jack@greensock.com
-  */
-
-gsap/Observer.js:
-  /*!
-   * Observer 3.15.1
-   * https://gsap.com
-   *
-   * @license Copyright 2008-2026, GreenSock. All rights reserved.
-   * Subject to the terms at https://gsap.com/standard-license
-   * @author: Jack Doyle, jack@greensock.com
-  */
-
-gsap/ScrollTrigger.js:
-  /*!
-   * ScrollTrigger 3.15.1
-   * https://gsap.com
-   *
-   * @license Copyright 2008-2026, GreenSock. All rights reserved.
-   * Subject to the terms at https://gsap.com/standard-license
-   * @author: Jack Doyle, jack@greensock.com
-  */
-
-animejs/dist/modules/core/consts.js:
-animejs/dist/modules/core/globals.js:
-animejs/dist/modules/core/helpers.js:
-animejs/dist/modules/core/transforms.js:
-animejs/dist/modules/core/colors.js:
-animejs/dist/modules/core/values.js:
-animejs/dist/modules/core/render.js:
-animejs/dist/modules/core/styles.js:
-animejs/dist/modules/core/clock.js:
-animejs/dist/modules/core/targets.js:
-animejs/dist/modules/core/units.js:
-  /**
-   * Anime.js - core - ESM
-   * @version v4.5.0
-   * @license MIT
-   * @copyright 2026 - Julian Garnier
-   */
-
-animejs/dist/modules/adapters/registry.js:
-  /**
-   * Anime.js - adapters - ESM
-   * @version v4.5.0
-   * @license MIT
-   * @copyright 2026 - Julian Garnier
-   */
-
-animejs/dist/modules/animation/additive.js:
-animejs/dist/modules/animation/composition.js:
-animejs/dist/modules/animation/animation.js:
-  /**
-   * Anime.js - animation - ESM
-   * @version v4.5.0
-   * @license MIT
-   * @copyright 2026 - Julian Garnier
-   */
-
-animejs/dist/modules/engine/engine.js:
-  /**
-   * Anime.js - engine - ESM
-   * @version v4.5.0
-   * @license MIT
-   * @copyright 2026 - Julian Garnier
-   */
-
-animejs/dist/modules/timer/timer.js:
-  /**
-   * Anime.js - timer - ESM
-   * @version v4.5.0
-   * @license MIT
-   * @copyright 2026 - Julian Garnier
-   */
-
-animejs/dist/modules/easings/none.js:
-animejs/dist/modules/easings/eases/parser.js:
-  /**
-   * Anime.js - easings - ESM
-   * @version v4.5.0
-   * @license MIT
-   * @copyright 2026 - Julian Garnier
-   */
-
-animejs/dist/modules/timeline/position.js:
-  /**
-   * Anime.js - timeline - ESM
-   * @version v4.5.0
-   * @license MIT
-   * @copyright 2026 - Julian Garnier
-   */
-
-animejs/dist/modules/utils/random.js:
-animejs/dist/modules/utils/stagger.js:
-  /**
-   * Anime.js - utils - ESM
-   * @version v4.5.0
-   * @license MIT
-   * @copyright 2026 - Julian Garnier
-   */
-
-animejs/dist/modules/index.js:
-  /**
-   * Anime.js - ESM
-   * @version v4.5.0
-   * @license MIT
-   * @copyright 2026 - Julian Garnier
    */

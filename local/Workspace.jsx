@@ -520,12 +520,9 @@ function App() {
     <ThemeProvider colorScheme={theme}>
     <div className={`app-shell density-${db.ui?.density || "comfortable"} ${menuOpen ? "menu-open" : ""} ${sidebarCollapsed ? "sidebar-collapsed" : ""}`}>
       <aside className="app-sidebar" id="crm-sidebar">
-        <div className="brand">
-          <span className="brand-mark">L</span>
-          <span>
-            <strong>Linear CRM</strong>
-            <small>Local-first CRM</small>
-          </span>
+        <div className="brand" aria-label="Linear CRM">
+          <span className="brand-wordmark" aria-hidden="true" />
+          <span className="brand-crm" aria-hidden="true">CRM</span>
         </div>
 
         <SearchButton block className="sidebar-search" onOpen={() => setCommandOpen(true)} />

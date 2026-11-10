@@ -15,6 +15,11 @@ for (const name of [
   "brand-linear-crm-ink.png",
   "brand-linear-crm-purple.png",
   "brand-linear-crm-white.png",
+  "linear-mark.png",
+  "linear-mark-white.png",
+  "linear-mark-256.png",
+  "linear-wordmark.png",
+  "linear-wordmark-white.png",
 ]) {
   fs.copyFileSync(`local/brand/${name}`, `public/brand/${name}`);
 }

@@ -108,13 +108,19 @@ Linear CRM is an intentional exploration of a **zero-backend, local-first CRM ex
 ## Core Features
 
 ### 1. Multi-Page Static Experience
-The project includes a 6-page static editorial website sharing core design tokens, responsive navigation, and interactive previews:
-- **`index.html` (Home)**: Hero workspace preview, interactive company search demo, dynamic forecast calculator, and FAQ accordions.
-- **`platform.html`**: Deep dive into pipelines, workflow canvas, forecast models, and data context.
-- **`product.html`**: Comprehensive showcase of table views, Kanban boards, calendar modes, and record moving.
-- **`resources.html`**: Browser storage mechanics, backup/restore instructions, keyboard shortcut registry, and technical documentation.
-- **`customers.html`**: Concrete architectural use cases (Founders, Sales Leads, Operations Teams).
-- **`pricing.html`**: Transparent \$0 local-first model detailing the honest boundaries between browser-local and hosted infrastructure.
+The project includes a 22-page static marketing site sharing one design system, responsive navigation, and live product previews. Every platform menu item resolves to its own page rather than an anchor on a shared page.
+- **`index.html` (Home)**: Hero workspace preview, platform stories, Liner, four working mini demos, use cases, pricing boundary, and FAQ.
+- **`platform.html`**: The connected system, linking to five platform detail pages.
+- **`product.html`**: Product tour with the live table, overview, data model, record moves, and saved views.
+- **`resources.html`**: Resources hub for storage, portability, backup, keyboard use, and the FAQ.
+- **`customers.html`**: Founder-led sales, studio, and solo-operator scenarios shown with sample records, not invented customers.
+- **`pricing.html`**: The transparent \$0 local-first model and the honest list of what a browser-local workspace does not include.
+- **`platform-pipeline.html`, `platform-workflows.html`, `platform-liner.html`, `platform-forecast.html`, `platform-context.html`**: One page per platform capability, each with a working demo.
+- **`product-data-model.html`, `product-record-moves.html`, `product-saved-views.html`**: Deeper product detail pages.
+- **`resources-local-first.html`, `resources-import-export.html`, `resources-backup.html`, `resources-keyboard.html`**: Operational and architectural resources.
+- **`privacy.html`, `terms.html`, `accessibility.html`, `cookies.html`**: Legal, accessibility, and browser-storage documents for the personal evaluation project.
+
+The full production plan, including page architecture, section order, copy rules, accessibility, and measurement, lives in [`landingplan.md`](landingplan.md).
 
 ### 2. Core CRM Entities & Data Model
 - **Companies**: Firmographic tracking (domain, tier, employee headcount, annual revenue, ICP fit, relationship status: Prospect, Active customer, Partner, Former customer, Supplier), associated contacts, and linked opportunities.
@@ -554,19 +560,24 @@ node scripts/take-screenshots.mjs
 
 ```
 LinearCRM/
-├── index.html                    # Editorial marketing home page
-├── platform.html                 # Platform architecture page
-├── product.html                  # Product interactive walkthrough page
-├── resources.html                # Setup, storage & FAQ documentation
-├── customers.html                # Architectural use cases page
-├── pricing.html                  # Pricing & local-first boundary page
+├── index.html                    # Marketing home page
+├── platform.html                 # Platform overview
+├── product.html                  # Product tour
+├── resources.html                # Resources hub
+├── customers.html                # Use cases
+├── pricing.html                  # Pricing and local-first boundaries
+├── platform-*.html               # Pipeline, workflows, Liner, forecast, context
+├── product-*.html                # Data model, record moves, saved views
+├── resources-*.html              # Local-first, import/export, backup, keyboard
+├── landingplan.md                # Production landing page plan
 ├── app.html                      # Single-page CRM workspace entry point
 ├── build.mjs                     # esbuild build pipeline for JS, CSS & assets
 ├── package.json                  # Dependencies, scripts, and package metadata
 │
 ├── local/                        # React 19 Workspace Source
 │   ├── Workspace.jsx             # Main CRM shell, router, sidebar & command menu
-│   ├── Landing.jsx               # Editorial marketing interactive components
+│   ├── Landing.jsx               # Marketing entry point and route selection
+│   ├── site/                     # Marketing design system, pages and live demos
 │   ├── Overview.jsx              # Executive dashboard & sales metrics
 │   ├── TableView.jsx             # High-density data table & column manager
 │   ├── BoardView.jsx             # Kanban drag-and-drop opportunity board

@@ -159,8 +159,30 @@ p {
 .brand {
   display: flex;
   align-items: center;
-  gap: 9px;
+  gap: 7px;
   padding: 4px 4px 18px;
+  color: var(--t-font-color-primary, #16181b);
+}
+
+.brand-wordmark {
+  display: block;
+  width: 68px;
+  height: 15px;
+  flex: none;
+  background: currentColor;
+  -webkit-mask: url("./brand/linear-wordmark.png") center / contain no-repeat;
+  mask: url("./brand/linear-wordmark.png") center / contain no-repeat;
+}
+
+.brand-crm {
+  padding: 1px 4px;
+  border: 1px solid var(--t-border-color-light, #e4e6e9);
+  border-radius: 4px;
+  color: var(--t-font-color-tertiary, #8b9098);
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
 }
 
 .brand-mark {
@@ -169,11 +191,17 @@ p {
   width: 26px;
   height: 26px;
   border-radius: 7px;
-  background: var(--t-background-inverted-primary, #292929);
-  color: var(--t-font-color-inverted, #fff);
+  background: #16181b;
+  color: #fff;
   font-weight: 700;
   font-size: 13px;
   letter-spacing: -0.4px;
+}
+
+.brand-mark img {
+  display: block;
+  width: 15px;
+  height: auto;
 }
 
 .brand > span:last-child {
