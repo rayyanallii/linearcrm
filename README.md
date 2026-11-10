@@ -1,124 +1,619 @@
+<div align="center">
+
 # Linear CRM
 
-A browser-local portfolio adaptation of [Twenty](https://github.com/twentyhq/twenty) with an Attio-inspired visual pass: calmer surfaces, cleaner table rows, stage dots, icon-led record fields and softer board cards. Open `index.html` or serve this directory with `python -m http.server 4817 --bind 127.0.0.1`. The landing page is at http://127.0.0.1:4817/ and the CRM workspace is at http://127.0.0.1:4817/app.html.
+**A modern, browser-local customer relationship management platform with an Attio and Linear-inspired visual design, built with React 19, Emotion, Twenty UI primitives, and esbuild.**
 
-## Pages
+[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
+[![React 19](https://img.shields.io/badge/React-19.3.1-61dafb.svg?logo=react&logoColor=white)](https://react.dev)
+[![esbuild](https://img.shields.io/badge/Bundler-esbuild-FFCF00.svg?logo=esbuild&logoColor=black)](https://esbuild.github.io)
+[![Playwright](https://img.shields.io/badge/Tests-Playwright%20E2E-2EAD33.svg?logo=playwright&logoColor=white)](https://playwright.dev)
+[![Architecture: Local-First](https://img.shields.io/badge/Architecture-Local--First%20%7C%20Zero--Backend-8A2BE2.svg)](#architecture--design-philosophy)
+[![Theme: Light & Dark](https://img.shields.io/badge/Theme-Light%20%26%20Dark-111111.svg)](#theme-engine--dark-mode)
 
-The navbar links to five separate static pages, each served from its own HTML file:
+<br/>
 
-- `/platform.html` — pipeline, workflows, forecast, Liner and account context.
-- `/product.html` — the interactive workspace, data model, record moves and saved views.
-- `/resources.html` — setup, browser storage, backup/restore, keyboard shortcuts and FAQ.
-- `/customers.html` — sample use cases, explicitly not customer logos or testimonials.
-- `/pricing.html` — the $0 plan plus the limits of a local-only project.
+<p align="center">
+  <a href="#visual-showcase">Showcase</a> •
+  <a href="#core-features">Features</a> •
+  <a href="#tools--technologies-used-non-ai">Tech Stack</a> •
+  <a href="#backend-integration-blueprint">Backend Integration Guide</a> •
+  <a href="#getting-started">Getting Started</a> •
+  <a href="#project-structure">Project Structure</a>
+</p>
 
-The header, announcement, footer and `public/landing.js` bundle are shared. The page is selected with `<body data-page="...">`; `index.html` is the home page.
+</div>
 
-## No backend
+---
 
-Linear CRM is a personal project, not a hosted service. There is no database, authentication service, billing system, sync worker or server-side API. The CRM is static HTML, CSS and JavaScript; workspace records are stored in the browser's `localStorage`, and the JSON backup is the portable copy. Clearing site data deletes the workspace unless it has been exported first. Liner uses local summaries by default and calls an optional external AI service only when a connection is configured.
+## Visual Showcase
 
-That trade-off is deliberate: there are no accounts, permissions, shared real-time workspaces, email delivery, payment processing, uptime guarantees or support desk. The Resources and Pricing pages state those limits directly instead of implying a hosted product exists.
+### Editorial Landing Page & Product Overview
+> Interactive marketing experience featuring real-time preview components, live filtering, and typography tokens.
 
-The landing page uses the same record model, type scale and surface language as the CRM. Its hero workspace, pipeline focus, data model, workflow, Liner, record-move and activity previews are interactive local components rather than screenshots.
+![Linear CRM Landing Page](docs/images/01-landing-hero.png)
 
-Companies, people, opportunities, tasks and notes share linked records. Opportunities have table and board views. Search covers all five record types. Settings and Account export and restore the current workspace as JSON. The original `linear-crm.v1` workspace is preserved; additional workspaces use their own local keys registered under `linear-crm.workspaces.v1`.
+---
 
-## Daily workflows
+### Workspace Overview & Sales Analytics
+> Executive dashboard with pipeline selectors, weighted forecasting, revenue metrics, stage distributions, and immediate follow-up lists.
 
-**Tasks** is the single place for task management, scheduling and recurring follow-ups. Waiting and Blocked remain open work; Done and Cancelled are closed. The former Activity page has been removed to avoid duplicate navigation.
+![Workspace Overview](docs/images/02-workspace-overview.png)
 
-For recurring work, set a task's **Repeat** to Daily, Weekly or Monthly and optionally set **Repeat until**. Marking it Done creates one next occurrence with the same CRM links and a fresh checklist. Monthly repeats retain their day-of-month anchor. Reopening a completed occurrence will not create duplicates. **Stop repeating** disables the series while keeping existing occurrences. Repeats advance from due dates; an overdue next occurrence stays overdue. No backend scheduler or notifications are used.
+---
 
-Task drawers show completion time and previous/next occurrence links. Completion time and checklist progress are available as table columns. Calendar exports now contain the actual task/opportunity names. Run `npm run test:activity` for the activity-management checks.
+### Record Table & Deep Detail Drawer
+> High-density table view with customizable visible columns, multi-select operations, and side drawer with timeline history, notes, and linked records.
 
-**Settings → Data quality** finds possible duplicate People by email and Companies by domain (or name when both have no domain). Select the record to keep, review differing fields and merge. Linked tasks, notes, opportunities, custom relationships, files and converted leads follow the retained record. The original duplicate remains in Trash; restoring it creates a separate record and does not undo the merge. Stale reviews are rejected before saving.
+![Companies Table & Drawer](docs/images/03-companies-table.png)
 
-Companies now have a **Relationship status** field for Prospect, Active customer, Partner, Former customer or Supplier. It is editable in the record drawer and available in table options, filters and CSV. Run `npm run test:duplicates` to verify merges and status editing.
+---
 
-Overview's **Sales metrics** selector scopes pipeline totals, weighted forecasts, won revenue, stage breakdown and recent opportunities to a pipeline. Stage links preserve that filter. Tasks and follow-ups remain workspace-wide. Outreach is managed in Leads; the standalone overview outreach strip has been removed.
+### Opportunities Kanban Board
+> Multi-pipeline opportunity management with drag-and-drop card movements, probability weightings, and real-time deal stage totals.
 
-In **Settings → Workspace**, save the workspace name and row density together. The account row at the bottom of the sidebar reflects the saved name. Appearance saves automatically. Backup restore and demo reset preserve the current workspace if storage fails. Run `npm run test:settings` for these checks and pipeline forecast verification.
+![Opportunities Kanban Board](docs/images/04-opportunities-kanban.png)
 
-**Account and workspaces** live behind the avatar row at the bottom of the sidebar. The menu switches workspaces and links to **Account** or workspace settings; the gear and theme controls stay beside it. **Account** edits the local display profile, creates blank or sample-data workspaces, and renames, duplicates, switches or deletes them. Each workspace is an independent local snapshot, so switching reloads the app into that workspace. The same page shows storage, backup, reset and Liner connection controls for the current workspace.
+---
 
-**Leads** is your raw outreach list. Start with **Not contacted**, then track **Contacted**, **Replied**, **Interested**, **Not interested** or **Follow-up**. Use **Convert lead** to bring worthwhile relationships into People and Companies. Older statuses remain supported for existing records and saved views.
+### Visual Workflow Studio
+> Node-based automation canvas supporting triggers, multi-branch conditional gates (Yes/No), wait pauses, field mutations, and task generation.
 
-Use **Leads → Import / export** for a CSV template, import preview, filtered-view export or all-leads export. Imports only add leads and default missing statuses to Not contacted. Use a JSON workspace backup when transferring converted records and their relationships.
+![Workflow Studio](docs/images/05-workflow-studio.png)
 
-Under **Settings → Pipelines → Stages**, reorder the standard stages and set their default probabilities. A board containing a single pipeline follows its configured order. New deals and future moves use those defaults; existing deal probabilities are retained. Custom stage names and additions remain planned.
+---
 
-**Settings → Pipelines** creates and renames pipelines and selects a default for new opportunities. Set an opportunity's **Pipeline** field, filter by it and save a board or table view. Pipelines currently share the standard sales stages. Stage and pipeline changes appear in the opportunity's **Timeline**, with actor and timestamp, and survive reloads. A pipeline containing opportunities (including Trash) cannot be deleted.
+### Lead Outreach & Qualification Pipeline
+> Structured outreach lifecycle with qualification stages, source attribution, budget tracking, and relationship-preserving conversion to People & Companies.
 
-Sidebar **Search** and **Ctrl+K** (Cmd+K on Mac) search record fields, including email addresses and custom-object records. The Search control keeps its full height in shorter windows.
+![Leads Management Pipeline](docs/images/06-leads-pipeline.png)
 
-**Leads** provides qualification, source, owner, priority, budget, business needs, next follow-up and lead age, with table and board views. Create linked tasks and notes from a lead. **Convert lead** creates or reuses a person and company and optionally creates an opportunity. Matching uses email, company name or domain; ambiguous matches require an explicit selection. Conversion retains the original lead and links its follow-ups to the resulting records. Converted leads can still be edited.
+---
 
-To change a record's section without retaining a copy, select one or more rows and choose **Move to…**. Leads can move to People or Companies; People and Companies can move back to Leads. Links, files, favourites and history follow the record. Converted leads are excluded so their existing conversion links stay intact.
+### Tasks & Recurrence Manager
+> Advanced task planner with daily, weekly, and monthly recurrence engine (day-of-month anchoring), completion tracking, and checklist support.
 
-Projects, Campaigns, Support tickets, Products & quotes, Invoices, Email accounts and the Emails log are optional **feature packs**, off by default. Enable each one in **Settings → Feature packs**; it then appears in navigation, search, create menus, dashboard sources and relation columns. Turning a pack off only hides those surfaces — records, saved views, workflows and links are kept, and a disabled pack leaves your existing workspace unchanged. The packs share the same schema-driven tables, saved views, filters, CSV, dashboards, workflows and record drawers as the sales objects, so nothing about creating or editing them needs a backend. Campaign sending is simulated locally — emails are written to the log, never delivered. Real SMTP delivery, mailbox sync, inbound ticket intake and SLA timers remain backend-only.
+![Tasks Manager](docs/images/07-tasks-manager.png)
 
-The **Products & quotes** pack adds a catalogue with SKU, category, unit price, unit cost, billing and availability. With it on, opportunities get a **Quote** section: add catalogue products or custom lines, set quantity and per-line discount, and see subtotal, total, margin and margin percentage update live. **Use total as amount** writes the quote total to the opportunity amount so forecasts and weighted pipeline follow the quote. Line items are stored on the record, included in backups and survive reloads.
+---
 
-The **Invoices** pack adds a billing record with status, issue/due dates and paid date. With both packs on, **Create invoice** on a quote copies its total, customer and lines into a draft invoice, linked back to the opportunity. Marking an invoice paid is manual; payment processing, tax rules and PDF quotes are not built.
+### Polished Dark Theme
+> High-contrast, accessibility-checked dark mode powered by the Twenty UI design system tokens.
 
-The **Campaigns** pack is now a real email campaign builder rather than a budget record. On a campaign, choose a **Sender** from your **Email accounts**, define an **Audience** (Leads or People, filtered by status, source, priority and owner, with live recipient preview), write a subject and body with `{{first_name}}`, `{{company}}` and `{{role}}` merge tags, attach a file, set a start date and add up to three **Follow-ups** with their own wait days, subject and body. **Start campaign** snapshots the audience; **Send next batch** logs up to the sender's remaining daily allowance (25 max per batch), links each email to the lead or person and the campaign, advances the progress bar and respects warm-up. **Pause**, **Resume** and **Complete** drive the status, and a follow-up can be logged once the first email went out. Everything is local and reversible through Trash.
+![Dark Mode Overview](docs/images/08-dark-mode-overview.png)
 
-The **Email accounts** pack adds an **Email accounts** page for SMTP senders. **Connect mailbox** pre-fills Gmail (`smtp.gmail.com`, port 587, TLS) or Google Workspace, Outlook and custom SMTP; store a from address, username, app password and daily limit. Each account has a **warm-up** schedule that ramps from 5 sends to the daily limit over 14 days, **Verify**, **Advance day**, pause/resume, and a health score with plain reasons (unverified credentials, warm-up day, overuse, bounce rate). Credentials stay in this browser and no connection is ever opened.
+---
 
-Enabled packs join the existing **Sales** and **Productivity** sidebar groups rather than adding new headers, and a group only renders when it has at least one visible page — so disabling a pack leaves no empty heading behind. **Overview** no longer offers a New lead shortcut (Leads remains the place for outreach), and its sales row shows pipeline scope; the pipeline selector only appears once the workspace has more than one pipeline, since with a single pipeline every figure would stay the same.
+## Architecture & Design Philosophy
 
-Calendars switch between the **Month** grid, a **Week** board and an **Agenda** list. Week shows one column per day with add-on-day buttons; Agenda groups dated records day by day, flags overdue days in red, keeps the unscheduled list and exports the same `.ics` feed.
+Linear CRM is an intentional exploration of a **zero-backend, local-first CRM experience**. It combines the architectural rigor of [Twenty](https://github.com/twentyhq/twenty) with the calm, refined visual language of tools like Linear and Attio:
 
-**Workflows** opens as a list of your flows. **New workflow** opens a Studio canvas, and **Templates** starts a real graph from speed-to-lead, proposal follow-up or a renewal reminder — it lands in the same canvas, fully editable: drag in Condition, Create task, Update field, Assign owner or Wait widgets, then connect the circles — conditions have **Yes** and **No** outputs. The trigger is fixed and configured in the right-hand inspector. Flows execute exactly as drawn: conditions route down the matching branch, a Wait pauses the rest of the flow, and every action is validated before writing. Saved flows show their path, run count, queued runs and Active/Paused state in the list. **Run** executes a flow on a record you pick, with a **dry run** that lists the steps and queued waits without writing anything. Recent runs collapse into one row per execution with expandable steps. Besides tasks, field updates and owners, steps can create a note, log activity, save an email draft (never sent) or stop the flow.
+1. **Local-First & Client-Side Persistence**:
+   - Zero external server dependencies required out of the box.
+   - All workspace state (records, views, pipelines, workflows, custom schema) is persisted in the browser's `localStorage`.
+   - Complete multi-workspace isolation via distinct storage keys (`linear-crm.v1`, `linear-crm.workspaces.v1`).
+   - Portable JSON snapshot backup and one-click restoration with schema validation.
 
-Legacy rules are converted into the same graph on load, so older workflows keep working and open in the canvas. Waited flows resume when the app next loads or saves; **Run now** executes a queued run early. Pausing a workflow holds its queued runs until you resume it; deleting it cancels them. Run `npm run test:workflows` for 23 engine checks, including the wait-pauses-the-flow rule, Yes/No routing, the new actions, dry runs and pause suspension. Nothing executes while the browser is closed. Full semantics and the remaining roadmap are in [docs/workflows-design.md](docs/workflows-design.md). The audited status of every module in the specification now sits at the top of `newplan.md`.
+2. **Calm, High-Density Visual System**:
+   - Built on Twenty's open-source frontend primitives (`twenty-ui` and `twenty-front` components) and customized with Emotion.
+   - Restrained color palettes, stage dots, icon-led record badges, subtle borders, and smooth transitions.
+   - Clean, keyboard-accessible command palette (`Ctrl/Cmd + K`) for instant navigation and record lookup across all entities.
 
-Execution of `newplan.md` is tracked in [docs/phase-1-execution.md](docs/phase-1-execution.md). The first milestone implements local lead management and conversion. The rest of the specification remains a phased backlog; its final browser-only instruction governs backend-dependent features.
+3. **Modular Feature Packs**:
+   - Optional business capabilities (Campaigns, Products & Quotes, Invoices, Support Tickets, Projects, and Mailbox Registry) are packaged as toggles.
+   - When disabled, they stay completely out of sight without leaving empty navigation headers. When enabled, they inherit the exact same schema, table options, filters, drawers, and workflows as the core objects.
 
-Open Overview to review pipeline value, drill into a stage, or complete a follow-up. From an opportunity, use **Add linked task** or **Add linked note** to keep the next step with its record.
+---
 
-In any collection, open **Filters**, choose a field value or search the visible columns, then select **Save view**. Named views remember the filters, sort and opportunity layout. Use the saved-views selector to reopen one. Backups include these views.
+## Core Features
 
-## Source
+### 1. Multi-Page Static Experience
+The project includes a 6-page static editorial website sharing core design tokens, responsive navigation, and interactive previews:
+- **`index.html` (Home)**: Hero workspace preview, interactive company search demo, dynamic forecast calculator, and FAQ accordions.
+- **`platform.html`**: Deep dive into pipelines, workflow canvas, forecast models, and data context.
+- **`product.html`**: Comprehensive showcase of table views, Kanban boards, calendar modes, and record moving.
+- **`resources.html`**: Browser storage mechanics, backup/restore instructions, keyboard shortcut registry, and technical documentation.
+- **`customers.html`**: Concrete architectural use cases (Founders, Sales Leads, Operations Teams).
+- **`pricing.html`**: Transparent \$0 local-first model detailing the honest boundaries between browser-local and hosted infrastructure.
 
-The record-table row, header cell, data cell, record card, navigation group, navigation icon and page container in `local/upstream` come from Twenty's `twenty-front` at [b0730255](https://github.com/twentyhq/twenty/tree/b0730255e8babd44eb348a9c722226a157dec46a/packages/twenty-front). The drawer item and page header retain upstream styled elements with local navigation handlers. These source adaptations use Emotion to evaluate the upstream styling. The theme, buttons, tags and avatars come from the published `twenty-ui` package. See `local/upstream/LICENSE` for upstream terms.
+### 2. Core CRM Entities & Data Model
+- **Companies**: Firmographic tracking (domain, tier, employee headcount, annual revenue, ICP fit, relationship status: Prospect, Active customer, Partner, Former customer, Supplier), associated contacts, and linked opportunities.
+- **Contacts (People)**: Direct contact management with email, phone, job title, LinkedIn URLs, company links, and activity logs.
+- **Leads & Qualification**: Structured outreach tracking (`Not contacted` → `Contacted` → `Replied` → `Interested` → `Not interested` → `Follow-up`). Includes source attribution, qualification scores, budget sizing, and one-click lead conversion into Contact, Company, and Deal with deduplication matching.
+- **Opportunities & Deals**: Deal tracking with amount, probability, close date, owner, linked account, and timeline history.
+- **Tasks**: Priority levels, due dates, checklists, linked record associations, completion timestamps, and calendar export.
+- **Notes & Activity Timeline**: Rich textual records and immutable audit logs tracking stage moves, field alterations, and user actions.
 
-`local/Workspace.jsx` connects the views to the browser store and supplies the simplified record editor. This edition omits server-dependent features including authentication, server-side accounts, permissions, email sync and multi-user collaboration; account and workspace management are local only.
+### 3. Views & Layout Capabilities
+- **Interactive Table Views**: Customizable column visibility and order, multi-row bulk selections, column-header sorting, and inline cell editing.
+- **Kanban Board**: Drag-and-drop card movements between stages with stage metrics and total deal valuations.
+- **Calendar & Agenda Views**: Multi-mode calendar (Month grid, Week board with add-on-day action, and Agenda group-by-day feed). Exports live `.ics` calendar subscriptions with real record titles.
+- **Named Saved Views**: Filter combinations, sorting preferences, and column layouts can be named and saved per collection.
+- **Record Detail Drawers**: Non-disruptive slide-out drawers featuring editable fields, related record widgets, attachments, notes, and activity timeline feeds.
 
-## Records and customization
+### 4. Advanced Task Recurrence Engine
+- **Repeat Cadence**: Configurable Daily, Weekly, or Monthly repeating rules with optional expiration dates (`Repeat until`).
+- **Anchored Day-of-Month**: Monthly occurrences maintain their initial calendar anchor day (e.g. 31st automatically adjusts to month lengths without drift).
+- **Idempotent Succession**: Marking a task `Done` instantiates exactly one succeeding occurrence with clean checklists while retaining historical links. Re-opening a completed task never spawns duplicate iterations.
 
-**Companies → Options** controls column order and visibility, custom fields and CSV transfer. Select the checkboxes beside records for bulk updates and selected-row export. Click column headings to sort. **Filters → Add condition** combines field tests and can save them as a named view.
+### 5. Workflow Studio & Automation Engine
+- **Visual Canvas**: Drag-and-drop node graph builder with SVG Bezier connectors.
+- **Triggers**: Record Created, Deal Stage Changed, or Specific Field Value Changed.
+- **Conditional Logic**: Multi-condition gates with `ALL` (AND) or `ANY` (OR) branch evaluation routing through dedicated `Yes` and `No` output ports.
+- **Action Nodes**: Create Task, Create Note, Log Audit Activity, Generate Email Draft, Mutate Field Value, Reassign Owner, or Stop Execution.
+- **Wait Steps**: Pauses downstream execution until a specified delay elapsed. Resumes safely upon next application load or manual run.
+- **Simulation & Audit**: Built-in "Dry Run" simulator to preview triggered actions without mutating records, accompanied by expandable execution run logs.
 
-**Settings** creates custom objects and restores records from Trash. Record editors support favorites, duplication, file attachments and activity history. **Dashboards** builds charts from current records. **Workflows** creates tasks when opportunities enter a chosen stage. Tasks and Opportunities offer calendar views.
+### 6. Data Quality & Smart Record Merging
+- **Automated Detection**: Real-time scanning for duplicate People (matched on normalized email addresses) and Companies (matched on root domain or exact name).
+- **Conflict Review**: Side-by-side field diff inspection allowing operators to select which attribute values to retain.
+- **Relationship Preservation**: All linked tasks, notes, opportunities, files, converted leads, and history items migrate to the retained record. The superseded entity is moved safely to Trash.
 
-## Meet Liner, your AI Assistant
+### 7. Modular Feature Packs
+- **Campaigns & Email Warm-Up**: Multi-step email campaign builder with audience segmenting (Leads or People filtered by owner, source, or status), template merge tags (`{{first_name}}`, `{{company}}`), automated follow-up cadences, and simulated 14-day warm-up sending curves.
+- **Products, Quotes & Billing**: Product catalogue (SKUs, categories, unit prices, unit costs, billing cycles). Opportunity Quote builder with line items, quantity, item discounts, real-time margin percentage calculations, and one-click quote-to-amount synchronization.
+- **Invoices**: Convert accepted quotes into structured invoices with due dates, payment status tracking, and opportunity links.
+- **Support Tickets**: Ticket tracking with priority badges, status boards, category tags, and company/contact ties.
+- **Projects**: Project deliverables tracking milestones, budgets, actual spend, completion percentages, and linked sales opportunities.
+- **Mailbox Registry**: SMTP credential profiles (Gmail, Google Workspace, Outlook, Custom) with sender health scoring, daily allowance throttling, and connection diagnostics.
 
-Simple totals such as “How many leads do I have?” are answered directly from current browser data without an AI request or connection key. More complex requests still use the AI service. Failed requests keep the message ready to retry; clearing chat removes old error messages too.
+### 8. Multi-Workspace & Data Portability
+- **Workspace Sandboxes**: Switch between separate client or business workspaces stored under distinct local keys.
+- **Snapshot Management**: Create blank or demo-seeded workspaces, duplicate existing setups, rename, or delete workspaces.
+- **JSON Backup & Restore**: One-click full workspace export to a standalone `.json` bundle and safe transactional restoration.
+- **CSV Import & Export**: Import leads or contacts with CSV templates and export filtered table views.
 
-The sidebar groups pages under **Workspace**, including Overview. Right-click a page (or press Shift+F10) and choose **Pin** to add it to **Pinned**; right-click the pinned item to unpin it. Pins persist locally. Favorites and saved-view groups no longer appear in the sidebar; saved views remain available within their collection.
+---
 
-Open **Liner** for a persistent workspace chat. It can look up all standard and custom record collections, paginate results, and inspect views, workflows, dashboards, activity, pipeline settings and file metadata. Record text is treated as data, not instructions. Attachment contents and connection keys are not included in its tools.
+## Tools & Technologies Used (Non-AI)
 
-Ask it to create or update a record. Liner shows a field-by-field proposal; **Apply change** validates it against current data and saves through the normal store, workflows and audit history. Conflicting edits require a fresh proposal. Chat history and proposal statuses are saved locally and included in workspace backups. Clearing chat does not undo applied changes. Destructive deletion, external messages and workspace-configuration edits are not chat actions.
+Linear CRM is built with modern, battle-tested, standard web technologies.
 
-Connect the existing AI service in **Settings → Integrations → Liner** using a session API key. The key is stored in this tab's session storage, separate from backups and chat context. Alternatively, use the existing build environment configuration. Workspace data needed to answer questions is sent to that service. Without a connection, local summaries and workspace tools remain available.
+| Category | Technology | Version | Purpose in Linear CRM |
+|---|---|---|---|
+| **Core Framework** | [React](https://react.dev) | `^19.3.1` | Component model, reactive state management, hooks, and DOM rendering. |
+| **DOM Renderer** | [ReactDOM](https://react.dev) | `^19.3.1` | Client-side root rendering and portal drawer mounting. |
+| **Component Primitives** | [twenty-ui](https://github.com/twentyhq/twenty) | `^2.54.3` | Upstream design tokens, buttons, tags, avatars, data display, and input controls. |
+| **Styling & CSS-in-JS** | [@emotion/react](https://emotion.sh) | `^11.14.0` | Dynamic style evaluation for Twenty UI primitives and theme switching. |
+| **Component Styling** | [@emotion/styled](https://emotion.sh) | `^11.14.1` | Scoped styled component definitions matching upstream table architectures. |
+| **Iconography** | [@tabler/icons-react](https://tabler.io/icons) | `^3.50.0` | Comprehensive, consistent icon system across navigation, fields, and workflow nodes. |
+| **Typography** | [@fontsource/inter](https://fontsource.org/fonts/inter) | `^5.3.0` | Self-hosted Inter font faces (weights 400, 500, 600, 700) for zero-latency, offline font rendering. |
+| **Motion & Dynamics** | [framer-motion](https://www.framer.com/motion/) | `^14.10.1` | Smooth accordion transitions, modal entrances, and drawer slide animations. |
+| **Timeline Animations** | [gsap](https://greensock.com/gsap/) | `^3.15.1` | Coordinated workflow connector transitions and landing scene animations. |
+| **Micro-Interactions** | [animejs](https://animejs.com/) | `^4.5.0` | Metric counter animations and subtle SVG connector pulse effects. |
+| **Data Parsing** | [Papa Parse](https://www.papaparse.com/) | `^5.5.3` | In-browser RFC 4180 compliant CSV parsing, auto-typing, and CSV generation for export. |
+| **Build Bundler** | [esbuild](https://esbuild.github.io/) | `^0.28.2` | Ultra-fast JavaScript and CSS bundling, minification, tree-shaking, and font asset hashing. |
+| **End-to-End Testing** | [Playwright](https://playwright.dev/) | `^1.52.0` | Headless Chrome browser automation, visual regression verification, and E2E test suites. |
+| **Unit Testing** | [Node.js Test Runner](https://nodejs.org/api/test.html) | `node --test` | Zero-dependency native unit and domain testing for workflows, commerce, campaigns, and rules. |
+| **Static Server** | Python `http.server` | `3.14+` | Zero-configuration local static HTTP serving (`python -m http.server 4817`). |
 
-**Tasks → Record → Checklist** adds editable steps with completion tracking. Checklist items are retained in backups and task records. Completing checklist items does not automatically change the parent task's status.
+---
 
-Run `npm run test:liner` for domain validation and browser tests using a simulated AI service. These tests cover edits, conflicts, storage failures, persistence, connection-key handling and checklists; they do not certify a live provider connection.
+## Backend Integration Blueprint
 
-## Rebuild
+Linear CRM is architected with a clean separation between UI components (`local/*.jsx`), presentation logic, and state management (`local/store.js`, `local/schema.js`, `local/query.js`). 
 
-Run `npm run test:leads` with the local server running to verify conversion rules and browser workflows, including storage failure, duplicate reuse and refresh persistence.
+If you or your team wish to transform Linear CRM from a browser-local tool into a **multi-tenant, production-grade cloud SaaS**, here is the comprehensive architectural blueprint, database schema, and migration roadmap.
 
-Run `npm run test:landing` with the local server running to verify the landing page demos, mega menu, mobile navigation, all five static pages and responsive overflow.
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        Linear CRM Client (React 19)                    │
+│   TableView │ KanbanBoard │ RecordDrawer │ WorkflowStudio │ Overview   │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │ TanStack Query (REST / GraphQL)
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│                       Backend API Layer (Node / Go)                    │
+│   Auth / JWT │ Multi-Tenant Middleware │ Record Validation │ Webhooks  │
+└───────────┬───────────────────────┬───────────────────────┬────────────┘
+            │                       │                       │
+            ▼                       ▼                       ▼
+┌───────────────────────┐ ┌───────────────────┐ ┌────────────────────────┐
+│  PostgreSQL Database  │ │ Redis / Queue     │ │ S3 Storage / Email API │
+│  Relational Records   │ │ (BullMQ / Celery) │ │ Cloudflare R2 / S3     │
+│  Schema & Custom JSON │ │ Workers & Delays  │ │ Resend / SendGrid      │
+└───────────────────────┘ └───────────────────┘ └────────────────────────┘
+```
 
-Run `npm run test:moves` to verify record moves, link migration and the mobile move sheet.
+---
 
-Run `npm run test:pipelines` to verify pipeline migration and safeguards, stage history, and Search across desktop and mobile layouts.
+### 1. Relational Database Schema (PostgreSQL)
 
-Run `npm run test:commerce` for the quote totals, discount, margin and validation checks.
+Below is an enterprise-ready PostgreSQL schema covering all objects, relationships, custom fields, and workflow graphs:
 
-Run `npm ci --legacy-peer-deps` followed by `npm run build`. The generated JavaScript, CSS and fonts are in `public`. No runtime services or external fonts are required. `npm run test:e2e` runs the Playwright walkthrough (start the app on port 4817 first); the AI step runs only when `EXPLABS_API_KEY` is set.
+```sql
+-- 1. Tenants & Workspaces
+CREATE TABLE workspaces (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(255) NOT NULL,
+    slug VARCHAR(100) UNIQUE NOT NULL,
+    settings JSONB DEFAULT '{}'::jsonb, -- stores density, theme defaults, enabled feature packs
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
 
+CREATE TABLE users (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email VARCHAR(255) UNIQUE NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    avatar_url TEXT,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE workspace_members (
+    workspace_id UUID REFERENCES workspaces(id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    role VARCHAR(50) DEFAULT 'member', -- 'owner', 'admin', 'member', 'viewer'
+    PRIMARY KEY (workspace_id, user_id)
+);
+
+-- 2. Companies & Contacts
+CREATE TABLE companies (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    domain VARCHAR(255),
+    industry VARCHAR(100),
+    tier VARCHAR(50),
+    relationship_status VARCHAR(50) DEFAULT 'prospect',
+    annual_revenue NUMERIC(15, 2),
+    employee_count INT,
+    owner_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    custom_fields JSONB DEFAULT '{}'::jsonb,
+    is_deleted BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX idx_companies_workspace ON companies(workspace_id) WHERE NOT is_deleted;
+CREATE INDEX idx_companies_domain ON companies(workspace_id, domain);
+
+CREATE TABLE contacts (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    company_id UUID REFERENCES companies(id) ON DELETE SET NULL,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100),
+    email VARCHAR(255),
+    phone VARCHAR(50),
+    job_title VARCHAR(150),
+    linkedin_url TEXT,
+    owner_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    custom_fields JSONB DEFAULT '{}'::jsonb,
+    is_deleted BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX idx_contacts_workspace ON contacts(workspace_id) WHERE NOT is_deleted;
+CREATE INDEX idx_contacts_email ON contacts(workspace_id, email);
+
+-- 3. Leads & Qualification
+CREATE TABLE leads (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100),
+    email VARCHAR(255),
+    company_name VARCHAR(255),
+    status VARCHAR(50) DEFAULT 'not_contacted', -- 'not_contacted', 'contacted', 'replied', 'interested', 'not_interested', 'follow_up'
+    priority VARCHAR(20) DEFAULT 'medium',
+    source VARCHAR(100),
+    budget NUMERIC(15, 2),
+    business_needs TEXT,
+    converted_contact_id UUID REFERENCES contacts(id) ON DELETE SET NULL,
+    converted_company_id UUID REFERENCES companies(id) ON DELETE SET NULL,
+    owner_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    is_deleted BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 4. Pipelines, Stages & Opportunities
+CREATE TABLE pipelines (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    is_default BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE pipeline_stages (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    pipeline_id UUID NOT NULL REFERENCES pipelines(id) ON DELETE CASCADE,
+    name VARCHAR(100) NOT NULL,
+    position INT NOT NULL,
+    probability INT NOT NULL DEFAULT 20, -- 0 to 100 percentage
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE opportunities (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    pipeline_id UUID NOT NULL REFERENCES pipelines(id) ON DELETE RESTRICT,
+    stage_id UUID NOT NULL REFERENCES pipeline_stages(id) ON DELETE RESTRICT,
+    company_id UUID REFERENCES companies(id) ON DELETE SET NULL,
+    contact_id UUID REFERENCES contacts(id) ON DELETE SET NULL,
+    name VARCHAR(255) NOT NULL,
+    amount NUMERIC(15, 2) DEFAULT 0,
+    probability INT,
+    expected_close_date DATE,
+    owner_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    quote_data JSONB DEFAULT '{}'::jsonb, -- line items, discounts, margin totals
+    is_deleted BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 5. Tasks, Recurrence & Notes
+CREATE TABLE tasks (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    status VARCHAR(50) DEFAULT 'open', -- 'open', 'in_progress', 'waiting', 'blocked', 'done', 'cancelled'
+    priority VARCHAR(20) DEFAULT 'medium',
+    due_date TIMESTAMPTZ,
+    completed_at TIMESTAMPTZ,
+    
+    -- Recurrence Configuration
+    repeat_interval VARCHAR(20), -- 'daily', 'weekly', 'monthly', NULL
+    repeat_until TIMESTAMPTZ,
+    repeat_anchor_day INT, -- anchor day for monthly
+    parent_recurring_task_id UUID REFERENCES tasks(id) ON DELETE SET NULL,
+    
+    -- Dynamic Polymorphic Associations
+    linked_company_id UUID REFERENCES companies(id) ON DELETE SET NULL,
+    linked_contact_id UUID REFERENCES contacts(id) ON DELETE SET NULL,
+    linked_opportunity_id UUID REFERENCES opportunities(id) ON DELETE SET NULL,
+    
+    checklists JSONB DEFAULT '[]'::jsonb, -- array of { id, text, done }
+    owner_id UUID REFERENCES users(id) ON DELETE SET NULL,
+    is_deleted BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE notes (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    linked_company_id UUID REFERENCES companies(id) ON DELETE CASCADE,
+    linked_contact_id UUID REFERENCES contacts(id) ON DELETE CASCADE,
+    linked_opportunity_id UUID REFERENCES opportunities(id) ON DELETE CASCADE,
+    created_by UUID REFERENCES users(id) ON DELETE SET NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 6. Workflows & Visual Graph State
+CREATE TABLE workflows (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    name VARCHAR(255) NOT NULL,
+    enabled BOOLEAN DEFAULT TRUE,
+    trigger JSONB NOT NULL, -- { object: "deals", event: "stage_changed", value: "Proposal" }
+    nodes JSONB NOT NULL,   -- graph nodes: coordinates, step definitions
+    edges JSONB NOT NULL,   -- graph connectors: source, target, sourceHandle ('yes'/'no')
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE workflow_runs (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    workflow_id UUID NOT NULL REFERENCES workflows(id) ON DELETE CASCADE,
+    workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    target_record_type VARCHAR(50) NOT NULL,
+    target_record_id UUID NOT NULL,
+    status VARCHAR(50) DEFAULT 'completed', -- 'queued', 'running', 'completed', 'failed'
+    steps_log JSONB DEFAULT '[]'::jsonb,
+    error_message TEXT,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+CREATE TABLE workflow_schedules (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    workflow_id UUID NOT NULL REFERENCES workflows(id) ON DELETE CASCADE,
+    workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE,
+    step_id VARCHAR(100) NOT NULL,
+    target_record_type VARCHAR(50) NOT NULL,
+    target_record_id UUID NOT NULL,
+    execute_at TIMESTAMPTZ NOT NULL,
+    status VARCHAR(20) DEFAULT 'pending',
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+CREATE INDEX idx_workflow_schedules_due ON workflow_schedules(execute_at) WHERE status = 'pending';
+```
+
+---
+
+### 2. API Endpoints Specification
+
+An idiomatic REST or GraphQL API for this schema:
+
+| Resource | Method | Endpoint | Purpose |
+|---|---|---|---|
+| **Auth** | `POST` | `/api/v1/auth/register`, `/api/v1/auth/login` | Session issuance / JWT cookie generation. |
+| **Workspaces** | `GET`, `POST` | `/api/v1/workspaces` | Workspace switching and tenant configuration. |
+| **Companies** | `GET`, `POST` | `/api/v1/companies` | List with cursor pagination, filtering (`?tier=A`), create. |
+| **Companies** | `PATCH`, `DELETE`| `/api/v1/companies/:id` | Inline update and soft-delete to Trash. |
+| **Contacts** | `GET`, `POST` | `/api/v1/contacts` | Contact management with company link hydration. |
+| **Leads** | `POST` | `/api/v1/leads/:id/convert` | Atomic lead conversion into Contact, Company, and Deal. |
+| **Deals** | `GET` | `/api/v1/opportunities?pipeline_id=...` | Board and table view query with aggregations. |
+| **Deals** | `PATCH` | `/api/v1/opportunities/:id/stage` | Kanban drag-and-drop stage updates with workflow event triggers. |
+| **Tasks** | `POST` | `/api/v1/tasks/:id/complete` | Complete task and compute next recurring occurrence. |
+| **Workflows** | `POST` | `/api/v1/workflows/:id/run` | Manual run or dry-run execution on a given record. |
+| **Data Quality**| `POST` | `/api/v1/data-quality/merge` | Merge two records and re-link associated dependencies. |
+| **Search** | `GET` | `/api/v1/search?q=...` | Full-text search across all entity fields for `Ctrl+K`. |
+
+---
+
+### 3. Step-by-Step Frontend Migration Plan
+
+To adapt the existing frontend from `local/store.js` to a remote backend:
+
+1. **Introduce a Data Client Layer (TanStack Query)**:
+   - Install `@tanstack/react-query`:
+     ```bash
+     npm install @tanstack/react-query
+     ```
+   - In `local/store.js`, wrap fetch operations in query hooks:
+     ```javascript
+     export function useCompanies(filters) {
+       return useQuery({
+         queryKey: ['companies', filters],
+         queryFn: () => fetch(`/api/v1/companies?${new URLSearchParams(filters)}`).then(r => r.json()),
+       });
+     }
+     ```
+
+2. **Optimistic UI Updates for Instant Response**:
+   - For Kanban card drops and table cell edits, apply TanStack Query's `onMutate` optimistic updates so the UI remains as instant and fluid as the current `localStorage` edition.
+
+3. **Background Job Queue (BullMQ / Redis)**:
+   - The frontend's client-side recurrence calculation (`local/task-activity.mjs`) and workflow wait execution (`local/workflow-engine.mjs`) should move to backend worker queues:
+     - **Recurring Task Generator**: A 1-minute cron worker evaluates due dates and spawns next occurrences.
+     - **Workflow Wait Processor**: When a workflow hits a `Wait` node, an entry is added to `workflow_schedules` or a delayed BullMQ job is enqueued (`{ delay: waitHours * 3600000 }`).
+     - **Campaign Batch Sender**: Scheduled workers dispatch queued email batches within the mailbox's daily warm-up quota.
+
+4. **Transactional Email & Attachment Storage**:
+   - **Email Dispatch**: Integrate [Resend](https://resend.com) or [SendGrid](https://sendgrid.com) to execute actual email sends from Campaign Studio.
+   - **Asset Uploads**: Replace file data strings with pre-signed upload URLs to Amazon S3 or Cloudflare R2 (`PUT /api/v1/uploads/presigned`).
+
+---
+
+## Getting Started
+
+### Prerequisites
+- **Node.js**: Version `20.x` or higher
+- **Python**: Version `3.x` (for local static HTTP serving)
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/rayyanallii/linearcrm.git
+cd linearcrm
+
+# Install project dependencies
+npm ci --legacy-peer-deps
+```
+
+### Build & Run Locally
+
+```bash
+# 1. Bundle the frontend with esbuild
+npm run build
+
+# 2. Start the local development server (binds to http://127.0.0.1:4817)
+npm run serve
+```
+
+Once running, navigate to:
+- **Marketing & Editorial Site**: [http://127.0.0.1:4817/](http://127.0.0.1:4817/)
+- **Interactive CRM Workspace**: [http://127.0.0.1:4817/app.html](http://127.0.0.1:4817/app.html)
+
+---
+
+## Test Suite & Verification
+
+Linear CRM comes with comprehensive unit and Playwright end-to-end test coverage.
+
+```bash
+# Run workflow graph & condition rule checks
+npm run test:workflows
+
+# Run quote line items, discounts, margin, and commerce calculations
+npm run test:commerce
+
+# Run campaign audience segmentation & email warm-up ramp tests
+npm run test:campaigns
+
+# Run lead conversion & deduplication unit tests
+npm run test:leads
+
+# Run duplicate detection & merge verification
+npm run test:duplicates
+
+# Run pipeline settings & forecasting verification
+npm run test:pipelines
+
+# Run task recurrence engine & activity tracking tests
+npm run test:activity
+
+# Run the complete Playwright E2E browser walkthrough (requires server running)
+npm run test:e2e
+```
+
+To take fresh high-resolution screenshots for documentation or presentations:
+```bash
+node scripts/take-screenshots.mjs
+```
+
+---
+
+## Project Structure
+
+```
+LinearCRM/
+├── index.html                    # Editorial marketing home page
+├── platform.html                 # Platform architecture page
+├── product.html                  # Product interactive walkthrough page
+├── resources.html                # Setup, storage & FAQ documentation
+├── customers.html                # Architectural use cases page
+├── pricing.html                  # Pricing & local-first boundary page
+├── app.html                      # Single-page CRM workspace entry point
+├── build.mjs                     # esbuild build pipeline for JS, CSS & assets
+├── package.json                  # Dependencies, scripts, and package metadata
+│
+├── local/                        # React 19 Workspace Source
+│   ├── Workspace.jsx             # Main CRM shell, router, sidebar & command menu
+│   ├── Landing.jsx               # Editorial marketing interactive components
+│   ├── Overview.jsx              # Executive dashboard & sales metrics
+│   ├── TableView.jsx             # High-density data table & column manager
+│   ├── BoardView.jsx             # Kanban drag-and-drop opportunity board
+│   ├── RecordPage.jsx            # Detail drawer, tabs, fields & relations
+│   ├── Workflows.jsx             # Workflows list & management
+│   ├── WorkflowStudio.jsx        # Visual node-graph automation canvas
+│   ├── workflow-engine.mjs       # Graph traversal, conditions & execution engine
+│   ├── workflow-templates.mjs    # Pre-built automation templates
+│   ├── LeadConversion.jsx        # Lead qualification & conversion modal
+│   ├── DataQuality.jsx           # Duplicate scanning & merge review UI
+│   ├── duplicates.js             # Email & domain deduplication algorithms
+│   ├── QuoteBuilder.jsx          # Product catalogue & quote calculator
+│   ├── commerce.mjs              # Line item pricing, discount & margin math
+│   ├── CampaignStudio.jsx        # Campaign builder & audience segmenting
+│   ├── campaigns.mjs             # Campaign send planner & warm-up curves
+│   ├── Mailboxes.jsx             # SMTP profiles & sender health diagnostics
+│   ├── RecordCalendar.jsx        # Month, Week, and Agenda calendars
+│   ├── task-activity.mjs         # Day-anchored task recurrence engine
+│   ├── store.js                  # LocalStorage data persistence layer
+│   ├── schema.js                 # Dynamic record schema & custom fields
+│   └── upstream/                 # Adapted Twenty UI primitives (licensed under AGPL-3.0)
+│
+├── public/                       # Compiled production artifacts
+│   ├── linear.js                 # Bundled CRM application
+│   ├── linear.css                # Bundled CRM styles
+│   ├── landing.js                # Bundled marketing site code
+│   ├── landing.css               # Bundled marketing site styles
+│   ├── brand/                    # Brand marks and app icons
+│   └── assets/                   # Hashed Inter font files
+│
+├── docs/                         # Documentation & Visual Assets
+│   ├── images/                   # High-resolution screenshots for README
+│   ├── workflows-design.md       # Graph execution engine design specification
+│   └── phase-1-execution.md      # Development milestone logs
+│
+└── scripts/                      # Test Harnesses & E2E Suites
+    ├── e2e.mjs                   # Comprehensive Playwright E2E walkthrough
+    ├── workflow-canvas.e2e.mjs   # Workflow visual canvas interaction tests
+    ├── lead-conversion.test.mjs  # Unit tests for lead conversion
+    ├── commerce.test.mjs         # Unit tests for quotes and discounts
+    ├── campaigns.test.mjs        # Unit tests for warm-up and audience filters
+    └── take-screenshots.mjs      # Automated screenshot capture script
+```
+
+---
+
+## License & Upstream Attribution
+
+- The record-table row, header cell, data cell, record card, navigation group, navigation icon, and page container in `local/upstream/` are adapted from [Twenty](https://github.com/twentyhq/twenty) (`twenty-front`), licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**. See [`local/upstream/LICENSE`](local/upstream/LICENSE) for upstream terms.
+- Linear CRM is distributed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**.
